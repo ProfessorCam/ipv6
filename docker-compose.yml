@@ -1,0 +1,8 @@
+services:
+  ipv6:
+    build: .
+    container_name: ipv6
+    # Nothing on this site needs the host's network; plain port publishing is enough.
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
