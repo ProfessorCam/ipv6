@@ -32,7 +32,7 @@
     return Array.isArray(r) ? r : [r];
   }
 
-  function fmtN(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function fmtN(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   function big(p2) { return p2.number !== null ? fmtN(p2.number) : '2<sup>' + p2.bits + '</sup>' + (p2.human ? ' <span class="dim">(' + p2.human + ')</span>' : ''); }
 
   /* ---------- expanding site menu ---------- */
@@ -66,17 +66,24 @@
   var STACK_GROUPS = { basics: 'Foundations', cidr: 'Prefixes', kinds: 'Kinds of address', practice: 'Practice' };
 
   function buildNav() {
-    var last = null;
+    var last = null, section = nav;
     LESSONS.forEach(function (l) {
       if (l.stack !== undefined && l.stack !== last) {
-        var g = document.createElement('div'); g.className = 'nav-group'; g.textContent = STACK_GROUPS[l.stack] || String(l.stack); nav.appendChild(g); last = l.stack;
+        section = document.createElement('div');
+        section.className = 'nav-section ' + String(l.stack);
+        var g = document.createElement('div');
+        g.className = 'nav-group';
+        g.textContent = STACK_GROUPS[l.stack] || String(l.stack);
+        section.appendChild(g);
+        nav.appendChild(section);
+        last = l.stack;
       }
       var b = document.createElement('button');
       b.className = 'row'; b.type = 'button'; b.dataset.id = l.id;
       b.title = l.subtitle;
       b.innerHTML = '<span class="text"><span class="title">' + esc(l.title) + '</span></span>' + (l.chip ? '<span class="lay">' + esc(l.chip) + '</span>' : '');
       b.addEventListener('click', function () { location.hash = l.id; });
-      nav.appendChild(b);
+      section.appendChild(b);
     });
   }
 
@@ -558,31 +565,32 @@
     if (st.graded) grade();
   }
 
-  /* ---------- collapsible sidebar ---------- */
+  /* ---------- collapsible sidebar: click empty space to hide, click the strip to show ---------- */
 
   var NAV_KEY = 'packet-lessons-nav';
-  function navCollapsed() { return document.querySelector('.app').classList.contains('nav-collapsed'); }
-  function paintNavBtn(btn) {
-    var c = navCollapsed();
-    btn.innerHTML = c ? '&#8250; <span>Lessons</span>' : '&#8249; <span>Hide</span>';
-    btn.title = c ? 'Show the lesson list' : 'Hide the lesson list';
-    btn.setAttribute('aria-label', btn.title);
-    btn.setAttribute('aria-expanded', c ? 'false' : 'true');
-  }
-  function wireNavToggle(wrap) {
-    if (!wrap) return;
-    var app = document.querySelector('.app'), saved = null;
+  function wireSideCollapse() {
+    var app = document.querySelector('.app'), side = document.querySelector('.side');
+    if (!side) return;
+    var saved = null;
     try { saved = localStorage.getItem(NAV_KEY); } catch (e) { /* no storage */ }
     if (saved === 'collapsed') app.classList.add('nav-collapsed');
-    var btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'side-toggle'; btn.setAttribute('aria-controls', 'nav');
-    paintNavBtn(btn);
-    btn.addEventListener('click', function () {
-      app.classList.toggle('nav-collapsed');
-      try { localStorage.setItem(NAV_KEY, navCollapsed() ? 'collapsed' : 'open'); } catch (e) { /* ignore */ }
-      paintNavBtn(btn);
+    var strip = document.createElement('button');
+    strip.type = 'button'; strip.className = 'side-strip'; strip.title = 'Show the lesson list';
+    strip.setAttribute('aria-label', 'Show the lesson list');
+    strip.innerHTML = '<span>Lessons</span>';
+    side.appendChild(strip);
+    side.title = 'Click an empty part of this list to hide it';
+    function set(collapsed) {
+      app.classList.toggle('nav-collapsed', collapsed);
+      side.title = collapsed ? '' : 'Click an empty part of this list to hide it';
+      try { localStorage.setItem(NAV_KEY, collapsed ? 'collapsed' : 'open'); } catch (e) { /* ignore */ }
+    }
+    side.addEventListener('click', function (e) {
+      if (app.classList.contains('nav-collapsed')) { set(false); return; }
+      /* only empty space: not a lesson row, link, button or the brand */
+      if (e.target.closest('.row, a, button, input, select')) return;
+      set(true);
     });
-    wrap.insertBefore(btn, wrap.firstChild);
   }
 
   /* ---------- light / dark ---------- */
@@ -700,7 +708,7 @@
   window.rerender = function () { var y = main.scrollTop; route(); main.scrollTop = y; };
   wireLevelBar(document.getElementById('level-bar'));
   wireThemeBtn(document.getElementById('level-bar'));
-  wireNavToggle(document.getElementById('level-bar'));
+  wireSideCollapse();
   window.addEventListener('hashchange', route);
   route();
 })();

@@ -114,7 +114,7 @@ var IP6 = (function () {
     }
     return out;
   }
-  function fmtBig(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function fmtBig(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 
   /* How many /child subnets fit in a /parent */
   function subnetCount(parent, child) { return pow2(child - parent); }

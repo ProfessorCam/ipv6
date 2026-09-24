@@ -10,7 +10,7 @@ var CHECKS = (function () {
   function rnd(n) { return Math.floor(Math.random() * n); }
   function between(a, b) { return a + rnd(b - a + 1); }
   function pick(arr) { return arr[rnd(arr.length)]; }
-  function fmtN(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function fmtN(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   var SITES = ['2001:db8:acad', '2001:db8:1', '2001:db8:cafe', '2001:db8:beef', '2001:db8:10', '2001:db8:abcd'];
   var KIND_LABEL = { global: 'global unicast', doc: 'documentation (shaped like global unicast)', linklocal: 'link-local', ula: 'unique local', multicast: 'multicast', loopback: 'loopback', unspecified: 'the unspecified address', v4mapped: 'IPv4-mapped', nat64: 'the NAT64 prefix', teredo: 'Teredo', '6to4': '6to4', discard: 'discard-only', sitelocal: 'site-local (deprecated)', reserved: 'reserved' };
 

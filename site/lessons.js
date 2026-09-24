@@ -169,8 +169,8 @@ var LESSONS = [
         e: 'Global routing prefix (typically /48 or /56 from the ISP) + subnet ID (the bits between it and /64) + 64-bit interface identifier (RFC 4291 §2.5.4). SLAAC (RFC 4862) and EUI-64 require /64; RFC 7421 documents why the boundary is fixed.'
       }],
       ['What the ISP gives you', {
-        s: 'Not one address but a whole block, usually big enough for 256 or 65 536 separate networks in your house or company.',
-        m: 'A prefix, not an address: a home gets a /56 (256 subnets) or /48 (65 536 subnets); an enterprise a /48 or shorter. Each subnet is a /64. There is no NAT to save addresses.',
+        s: 'Not one address but a whole block, usually big enough for 256 or 65,536 separate networks in your house or company.',
+        m: 'A prefix, not an address: a home gets a /56 (256 subnets) or /48 (65,536 subnets); an enterprise a /48 or shorter. Each subnet is a /64. There is no NAT to save addresses.',
         e: 'RFC 6177 recommends /48 or /56 per end site (BCP 157); RIR policy gives ISPs /32 or shorter. Delegation to the CPE via DHCPv6-PD (RFC 8415). Each LAN, VLAN and point-to-point link gets its own /64 (RFC 6164 allows /127 on router links).'
       }]
     ],
@@ -188,9 +188,9 @@ var LESSONS = [
           'A host on a lab subnet. The ISP delegated <code>2001:db8:acad::/48</code> (blue: 48 bits). We picked subnet <code>0001</code> in the next 16 bits (green: the subnet ID), making the network <code>2001:db8:acad:1::/64</code>. The device fills the last 64 bits (pink: the interface ID). Every colour boundary falls on a colon, which is exactly why /48 and /64 are so common.'
         ],
         e: [
-          '<code>2001:db8:acad:1:20c:29ff:fe4b:1fa2/64</code>: routing prefix 2001:db8:acad::/48 (delegated), subnet ID 0x0001 (16 bits available → 65 536 /64s), IID 020c:29ff:fe4b:1fa2 (modified EUI-64 from 00:0c:29:4b:1f:a2, see {{row:iid}}). All boundaries hextet-aligned.'
+          '<code>2001:db8:acad:1:20c:29ff:fe4b:1fa2/64</code>: routing prefix 2001:db8:acad::/48 (delegated), subnet ID 0x0001 (16 bits available → 65,536 /64s), IID 020c:29ff:fe4b:1fa2 (modified EUI-64 from 00:0c:29:4b:1f:a2, see {{row:iid}}). All boundaries hextet-aligned.'
         ]
-      }, anatomy: { value: '2001:db8:acad:1:20c:29ff:fe4b:1fa2', prefix: 64, site: 48, left: 'global routing prefix, delegated by the ISP', mid: 'subnet ID, chosen by you: 16 bits here, so 65 536 subnets', right: 'interface ID: one device on that subnet' }, after: {
+      }, anatomy: { value: '2001:db8:acad:1:20c:29ff:fe4b:1fa2', prefix: 64, site: 48, left: 'global routing prefix, delegated by the ISP', mid: 'subnet ID, chosen by you: 16 bits here, so 65,536 subnets', right: 'interface ID: one device on that subnet' }, after: {
         s: [
           'Because the line always falls at 64, IPv6 subnetting almost never asks "how many devices fit?". The answer is always "more than you can ever plug in". The question is only "how many networks do I get, and what do I number them?"'
         ],
@@ -215,12 +215,12 @@ var LESSONS = [
     facts: [
       ['The rule', {
         s: 'Every four steps of the slider is one hex digit. Each hex digit you keep for yourself gives you 16 times as many networks.',
-        m: 'Subnets of /64 in a /p = 2<sup>(64 − p)</sup>. Every 4 bits is one hex digit: a /48 leaves 4 digits (65 536 subnets), a /56 leaves 2 (256), a /60 leaves 1 (16).',
+        m: 'Subnets of /64 in a /p = 2<sup>(64 − p)</sup>. Every 4 bits is one hex digit: a /48 leaves 4 digits (65,536 subnets), a /56 leaves 2 (256), a /60 leaves 1 (16).',
         e: '/64s per /p = 2<sup>64−p</sup>; total addresses = 2<sup>128−p</sup>. Nibble-align allocations so each level of the plan is a whole hex digit.'
       }],
       ['Worth remembering', {
-        s: '/48 = 65 536 networks. /56 = 256 networks. /64 = one network with more addresses than you can count.',
-        m: '/32 ISP, /48 site (65 536 /64s), /52 (4096), /56 home (256), /60 (16), /64 one subnet (2<sup>64</sup> addresses), /127 router link, /128 one host.',
+        s: '/48 = 65,536 networks. /56 = 256 networks. /64 = one network with more addresses than you can count.',
+        m: '/32 ISP, /48 site (65,536 /64s), /52 (4096), /56 home (256), /60 (16), /64 one subnet (2<sup>64</sup> addresses), /127 router link, /128 one host.',
         e: '/32 LIR minimum; /48 end site; /56 residential; /64 subnet; /127 p2p; /128 loopback/host. Address count per /64 = 2<sup>64</sup> ≈ 1.8 × 10<sup>19</sup>.'
       }]
     ],
@@ -246,10 +246,10 @@ var LESSONS = [
         e: '<b>/{p}</b>: {subtext} Range <code>{net}</code> – <code>{last}</code>; 2<sup>{hb}</sup> addresses; next block <code>{next}</code>. {slaac}'
       } }, after: {
         s: [
-          'Stop at <code>/48</code>: four green characters, so 16 × 16 × 16 × 16 = 65 536 networks. Move to <code>/56</code>: two green characters, 256 networks. That is the whole difference between a company allocation and a home one.'
+          'Stop at <code>/48</code>: four green characters, so 16 × 16 × 16 × 16 = 65,536 networks. Move to <code>/56</code>: two green characters, 256 networks. That is the whole difference between a company allocation and a home one.'
         ],
         m: [
-          '<code>/48</code> leaves a 16-bit subnet ID: four hex digits, 65 536 /64s. <code>/56</code> leaves 8 bits: two hex digits, 256 /64s. <code>/60</code> leaves one digit: 16 /64s. Because the ISP\'s prefix and your subnets both end on hex digits, you can read the subnet number straight out of the address: in <code>2001:db8:acad:<b>1a</b>::/64</code> under a /48, the subnet ID is <code>001a</code>.',
+          '<code>/48</code> leaves a 16-bit subnet ID: four hex digits, 65,536 /64s. <code>/56</code> leaves 8 bits: two hex digits, 256 /64s. <code>/60</code> leaves one digit: 16 /64s. Because the ISP\'s prefix and your subnets both end on hex digits, you can read the subnet number straight out of the address: in <code>2001:db8:acad:<b>1a</b>::/64</code> under a /48, the subnet ID is <code>001a</code>.',
           'Past <code>/64</code> the slider is cutting into the interface ID. Routers can do it (a /127 between two routers is standard), but hosts that configure themselves with SLAAC need a full /64, so LANs stay at /64.'
         ],
         e: [
@@ -289,7 +289,7 @@ var LESSONS = [
           'Choose the block on the left and how small to cut it on the right. The table lists each piece with its number. Try /48 into /64: the fourth group counts up from 0.'
         ],
         m: [
-          'Choose the delegated prefix (the parent) and the prefix to cut it into (the child). The table lists each subnet with its subnet ID, network address and range. Try /48 into /52 (one digit, 16 pieces), /48 into /56 (two digits, 256 pieces) and /48 into /64 (four digits, 65 536 pieces, the first 64 shown).'
+          'Choose the delegated prefix (the parent) and the prefix to cut it into (the child). The table lists each subnet with its subnet ID, network address and range. Try /48 into /52 (one digit, 16 pieces), /48 into /56 (two digits, 256 pieces) and /48 into /64 (four digits, 65,536 pieces, the first 64 shown).'
         ],
         e: [
           'Select parent and child prefixes; the table enumerates children with subnet ID, network, first assignable address (::1, since ::0 is the subnet-router anycast) and last address. Non-nibble-aligned children (e.g. /50) are allowed and show why they are avoided: IDs no longer map to whole digits.'
@@ -299,7 +299,7 @@ var LESSONS = [
           'Nobody works out how many devices fit. Every piece, however small the block, is still a /64 with more addresses than anyone could use.'
         ],
         m: [
-          '<b>A typical plan.</b> With a /48, many organisations spend the four subnet digits as a path: first digit = site or building, second = floor or department, last two = VLAN. <code>2001:db8:acad:<b>2</b><b>1</b><b>0a</b>::/64</code> reads as site 2, floor 1, VLAN 0a. Because there are 65 536 subnets, wasting most of them costs nothing. Compare IPv4, where every bit borrowed for subnets was a bit stolen from hosts.',
+          '<b>A typical plan.</b> With a /48, many organisations spend the four subnet digits as a path: first digit = site or building, second = floor or department, last two = VLAN. <code>2001:db8:acad:<b>2</b><b>1</b><b>0a</b>::/64</code> reads as site 2, floor 1, VLAN 0a. Because there are 65,536 subnets, wasting most of them costs nothing. Compare IPv4, where every bit borrowed for subnets was a bit stolen from hosts.',
           'Home routers usually receive a /56 and hand out /64s to each of their LANs (main, guest, IoT) by counting the last two digits of the subnet ID.'
         ],
         e: [
@@ -469,7 +469,7 @@ var LESSONS = [
       }]
     ],
     oneLiner: {
-      s: 'Practice until reading a /48 and writing its 65 536 subnets is as automatic as 192.168.1.0/24.',
+      s: 'Practice until reading a /48 and writing its 65,536 subnets is as automatic as 192.168.1.0/24.',
       m: 'Random IPv6 addressing questions of the seven kinds that appear in networking exams, with the working shown after each answer.',
       e: 'Generated drill over canonical form, subnet arithmetic, classification and EUI-64, with derivations on demand.'
     },
@@ -482,13 +482,13 @@ var LESSONS = [
       { h: 'Worked example: subnet 1a of 2001:db8:acad::/48', p: {
         s: [
           '<b>Step 1.</b> The provider\'s part is <code>2001:db8:acad</code>, three groups, 48 switches.',
-          '<b>Step 2.</b> The fourth group is ours to number networks with: 4 hex characters, 65 536 networks.',
+          '<b>Step 2.</b> The fourth group is ours to number networks with: 4 hex characters, 65,536 networks.',
           '<b>Step 3.</b> Network number 1a goes in that fourth group: <code>2001:db8:acad:1a::/64</code>. (The zeros in front of 1a are dropped.)',
           '<b>Step 4.</b> A device on it might be <code>2001:db8:acad:1a:20c:29ff:fe4b:1fa2</code>: same first four groups, its own last four.'
         ],
         m: [
           '<b>Delegated prefix.</b> <code>2001:db8:acad::/48</code>: 48 bits = 3 hextets = 12 hex digits fixed.',
-          '<b>Subnet ID field.</b> Bits 48 to 63 = the fourth hextet = 4 hex digits = 2<sup>16</sup> = 65 536 /64s.',
+          '<b>Subnet ID field.</b> Bits 48 to 63 = the fourth hextet = 4 hex digits = 2<sup>16</sup> = 65,536 /64s.',
           '<b>Subnet 0x001a.</b> Write it in the fourth hextet: <code>2001:db8:acad:001a::/64</code>, canonically <code>2001:db8:acad:1a::/64</code>. Range <code>2001:db8:acad:1a::</code> to <code>2001:db8:acad:1a:ffff:ffff:ffff:ffff</code>.',
           '<b>A host.</b> MAC 00:0c:29:4b:1f:a2 → IID 020c:29ff:fe4b:1fa2 → <code>2001:db8:acad:1a:20c:29ff:fe4b:1fa2</code>. Its network address: zero the last four hextets.'
         ],

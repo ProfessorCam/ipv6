@@ -43,8 +43,8 @@ opens the site at that level. The mechanism is `site/level.js`, identical on eve
 The site opens in dark mode. The sun/moon button switches to light; `?theme=light` or `?theme=dark` overrides
 for a visit. The dark palette is a block of `[data-theme="dark"]` overrides at the end of `site/style.css`.
 
-The lesson list can be hidden with the button at the top left of the page, leaving the rail and the lesson.
-The choice is remembered in the browser.
+Click an empty part of the lesson list to hide it, leaving the rail and the lesson; click the slim strip that
+remains to bring it back. The choice is remembered in the browser.
 
 ## Layout
 
