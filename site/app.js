@@ -73,7 +73,8 @@
       }
       var b = document.createElement('button');
       b.className = 'row'; b.type = 'button'; b.dataset.id = l.id;
-      b.innerHTML = '<span class="text"><span class="title">' + esc(l.title) + '</span><span class="sub">' + esc(l.subtitle) + '</span></span>' + (l.chip ? '<span class="lay">' + esc(l.chip) + '</span>' : '');
+      b.title = l.subtitle;
+      b.innerHTML = '<span class="text"><span class="title">' + esc(l.title) + '</span></span>' + (l.chip ? '<span class="lay">' + esc(l.chip) + '</span>' : '');
       b.addEventListener('click', function () { location.hash = l.id; });
       nav.appendChild(b);
     });
@@ -557,6 +558,33 @@
     if (st.graded) grade();
   }
 
+  /* ---------- collapsible sidebar ---------- */
+
+  var NAV_KEY = 'packet-lessons-nav';
+  function navCollapsed() { return document.querySelector('.app').classList.contains('nav-collapsed'); }
+  function paintNavBtn(btn) {
+    var c = navCollapsed();
+    btn.innerHTML = c ? '&#8250; <span>Lessons</span>' : '&#8249; <span>Hide</span>';
+    btn.title = c ? 'Show the lesson list' : 'Hide the lesson list';
+    btn.setAttribute('aria-label', btn.title);
+    btn.setAttribute('aria-expanded', c ? 'false' : 'true');
+  }
+  function wireNavToggle(wrap) {
+    if (!wrap) return;
+    var app = document.querySelector('.app'), saved = null;
+    try { saved = localStorage.getItem(NAV_KEY); } catch (e) { /* no storage */ }
+    if (saved === 'collapsed') app.classList.add('nav-collapsed');
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'side-toggle'; btn.setAttribute('aria-controls', 'nav');
+    paintNavBtn(btn);
+    btn.addEventListener('click', function () {
+      app.classList.toggle('nav-collapsed');
+      try { localStorage.setItem(NAV_KEY, navCollapsed() ? 'collapsed' : 'open'); } catch (e) { /* ignore */ }
+      paintNavBtn(btn);
+    });
+    wrap.insertBefore(btn, wrap.firstChild);
+  }
+
   /* ---------- light / dark ---------- */
 
   var THEME_KEY = 'packet-lessons-theme';
@@ -672,6 +700,7 @@
   window.rerender = function () { var y = main.scrollTop; route(); main.scrollTop = y; };
   wireLevelBar(document.getElementById('level-bar'));
   wireThemeBtn(document.getElementById('level-bar'));
+  wireNavToggle(document.getElementById('level-bar'));
   window.addEventListener('hashchange', route);
   route();
 })();
